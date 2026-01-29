@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unit 9: WORLD ENGLISHES - Global Success 9 (Full Version)</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2980b9; /* Blue for World Englishes */
+            --primary-dark: #2c3e50;
+            --secondary: #f39c12;
+            --bg: #ecf0f1;
+            --white: #ffffff;
+            --text: #2c3e50;
+            --success: #27ae60;
+            --error: #c0392b;
+            --border: #bdc3c7;
+        }
+
+        body { font-family: 'Segoe UI', system-ui, sans-serif; margin: 0; display: flex; height: 100vh; background: var(--bg); color: var(--text); overflow: hidden; }
+
+        /* SIDEBAR */
+        .sidebar { width: 300px; background: var(--white); border-right: 1px solid var(--border); display: flex; flex-direction: column; flex-shrink: 0; z-index: 10; box-shadow: 2px 0 10px rgba(0,0,0,0.05); }
+        .brand { padding: 20px; background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: white; font-weight: 800; font-size: 1.2rem; display: flex; align-items: center; gap: 10px; }
+        .nav-scroll { flex: 1; overflow-y: auto; padding: 10px 0; }
+        .nav-item { padding: 12px 20px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; border-left: 4px solid transparent; transition: 0.2s; color: #7f8c8d; font-weight: 600; font-size: 0.95rem; }
+        .nav-item:hover { background: #e1f5fe; color: var(--primary); }
+        .nav-item.active { background: #d6eaf8; border-left-color: var(--secondary); color: var(--primary-dark); font-weight: 700; }
+        .badge { font-size: 0.75rem; background: #ecf0f1; padding: 2px 8px; border-radius: 12px; color: #7f8c8d; }
+
+        /* CONTROLS */
+        .controls { padding: 15px; border-top: 1px solid var(--border); background: #f8f9fa; }
+        .toggle-row { display: flex; align-items: center; gap: 10px; margin-bottom: 15px; cursor: pointer; user-select: none; }
+        .switch { width: 44px; height: 24px; background: #bdc3c7; border-radius: 20px; position: relative; transition: 0.3s; }
+        .switch::after { content: ''; position: absolute; top: 2px; left: 2px; width: 20px; height: 20px; background: white; border-radius: 50%; transition: 0.3s; box-shadow: 0 1px 2px rgba(0,0,0,0.2); }
+        .toggle-row.active .switch { background: var(--success); }
+        .toggle-row.active .switch::after { transform: translateX(20px); }
+        
+        .action-btn { width: 100%; padding: 12px; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: 0.2s; font-size: 0.9rem; margin-top: 8px; }
+        .btn-check { background: var(--primary); color: white; box-shadow: 0 4px 0 var(--primary-dark); }
+        .btn-check:hover { transform: translateY(-2px); box-shadow: 0 6px 0 var(--primary-dark); }
+        .btn-check:active { transform: translateY(0); box-shadow: none; }
+        .btn-reset { background: white; border: 1px solid #bdc3c7; color: var(--text); }
+        .btn-reset:hover { background: #ecf0f1; }
+
+        /* MAIN CONTENT */
+        .main { flex: 1; overflow-y: auto; padding: 30px; position: relative; scroll-behavior: smooth; }
+        .header-box { margin-bottom: 25px; border-bottom: 2px solid #bdc3c7; padding-bottom: 15px; }
+        .unit-title { font-size: 1.8rem; font-weight: 800; color: var(--primary-dark); margin: 0; }
+        .unit-sub { color: #7f8c8d; margin-top: 5px; font-size: 1.1rem; font-style: italic; }
+
+        /* TRANSCRIPT */
+        .transcript-box { background: white; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); margin-bottom: 30px; overflow: hidden; border: 1px solid #e1e1e1; }
+        .ts-header { background: #f0faff; padding: 15px 20px; font-weight: 700; color: var(--text); display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #e1e1e1; }
+        .ts-body { padding: 20px; max-height: 350px; overflow-y: auto; }
+        .line { margin-bottom: 12px; padding: 10px; border-radius: 8px; cursor: pointer; transition: 0.2s; border: 1px solid transparent; }
+        .line:hover { background: #f9f9f9; }
+        .line.speaking { background: #d6eaf8; border-left: 4px solid var(--primary); border-color: #aed6f1; }
+        .char-name { font-weight: 800; color: var(--primary); margin-right: 5px; }
+        .vi-trans { display: block; font-size: 0.95rem; color: #7f8c8d; margin-top: 5px; font-style: italic; display: none; padding-top: 5px; border-top: 1px dashed #ecf0f1; }
+        .show-trans .vi-trans { display: block; }
+
+        /* EXERCISE CARDS */
+        .card { background: white; border-radius: 12px; padding: 25px; margin-bottom: 25px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); border: 1px solid #e1e1e1; }
+        .card h3 { margin-top: 0; color: var(--primary); border-bottom: 2px solid #f0faff; padding-bottom: 10px; font-size: 1.1rem; }
+        
+        .question-row { margin-bottom: 20px; padding: 15px; background: #fcfcfc; border-radius: 8px; border: 1px solid #ecf0f1; transition: 0.3s; border-left: 4px solid transparent; }
+        .question-row.correct { background: #eafaf1; border-color: var(--success); border-left-color: var(--success); }
+        .question-row.wrong { background: #fdedec; border-color: var(--error); border-left-color: var(--error); }
+
+        .q-text { font-weight: 600; margin-bottom: 5px; color: #2c3e50; font-size: 1.05rem; }
+        .q-vi { font-size: 0.95rem; color: #7f8c8d; font-style: italic; margin-bottom: 10px; display: none; }
+        .show-trans .q-vi { display: block; }
+
+        select.ans-select { width: 100%; padding: 10px; border: 1px solid #bdc3c7; border-radius: 6px; font-size: 1rem; background: white; cursor: pointer; outline: none; }
+        select.ans-select:focus { border-color: var(--primary); ring: 2px solid var(--primary); }
+
+        .feedback { margin-top: 10px; font-weight: 700; font-size: 0.9rem; min-height: 20px; display: flex; align-items: center; gap: 6px; }
+        .fb-correct { color: var(--success); }
+        .fb-wrong { color: var(--error); }
+
+        @media (max-width: 768px) {
+            body { flex-direction: column; height: auto; }
+            .sidebar { width: 100%; height: auto; }
+            .nav-scroll { max-height: 200px; }
+            .main { overflow: visible; padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+<aside class="sidebar">
+    <div class="brand"><i class="fas fa-globe-americas"></i> UNIT 9: ENGLISHES</div>
+    <div class="nav-scroll" id="navList"></div>
+    <div class="controls">
+        <div class="toggle-row" onclick="toggleTranslation()">
+            <div class="switch" id="transSwitch"></div>
+            <span style="font-weight: 600; font-size: 0.9rem;">Hiển thị dịch (Tiếng Việt)</span>
+        </div>
+        <button class="action-btn btn-check" onclick="checkAll()"><i class="fas fa-check-circle"></i> Chấm điểm</button>
+        <button class="action-btn btn-reset" onclick="resetSection()"><i class="fas fa-sync-alt"></i> Làm lại</button>
+    </div>
+</aside>
+
+<main class="main" id="mainArea">
+    </main>
+
+<script>
+/* ==========================================================================
+   DATA SOURCE - CHÍNH XÁC 100% TỪ ẢNH SÁCH GIÁO KHOA GLOBAL SUCCESS 9
+   ========================================================================== */
+const unitData = [
+    {
+        id: "getting_started",
+        title: "1. Getting Started",
+        subtitle: "What do you mean? (Em có ý gì?)",
+        dialogue: [
+            { c: "Teacher", en: "Hi class. I'd like to introduce an exchange student who comes from New York. Welcome Jack!", vi: "Chào cả lớp. Thầy muốn giới thiệu một bạn học sinh trao đổi đến từ New York. Chào mừng Jack!" },
+            { c: "Students", en: "Hello, Jack. Nice to meet you.", vi: "Chào Jack. Rất vui được gặp bạn." },
+            { c: "Jack", en: "Nice to meet you all. This is my first time in Viet Nam.", vi: "Rất vui được gặp mọi người. Đây là lần đầu tiên tớ đến Việt Nam." },
+            { c: "Teacher", en: "Now you can ask Jack any questions you would like to ask.", vi: "Bây giờ các em có thể hỏi Jack bất kỳ câu hỏi nào." },
+            { c: "Phong", en: "Do American students wear school uniforms every day, Jack?", vi: "Học sinh Mỹ có mặc đồng phục mỗi ngày không hả Jack?" },
+            { c: "Jack", en: "No, most American students don't wear school uniforms. Most students at my school wear pants and T-shirts.", vi: "Không, hầu hết học sinh Mỹ không mặc đồng phục. Ở trường tớ, học sinh thường mặc quần dài và áo phông." },
+            { c: "Phong", en: "What do you mean by 'pants', Jack?", vi: "Ý bạn 'pants' là gì cơ, Jack?" },
+            { c: "Jack", en: "Ah, I mean trousers. In American English, 'pants' mean 'trousers'.", vi: "À, ý tớ là quần dài. Trong tiếng Anh-Mỹ, 'pants' nghĩa là quần dài." },
+            { c: "Phong", en: "I see.", vi: "Tớ hiểu rồi." },
+            { c: "Teacher", en: "Yeah, there are some differences in vocabulary between American English and British English. Are there any more questions?", vi: "Đúng vậy, có một số khác biệt về từ vựng giữa Anh-Mỹ và Anh-Anh. Còn câu hỏi nào nữa không?" },
+            { c: "Mi", en: "Yes, I want to know about the students in your school. Are all of you American? And do all of you speak English?", vi: "Có ạ, em muốn biết về học sinh ở trường bạn. Tất cả đều là người Mỹ phải không? Và tất cả đều nói tiếng Anh chứ?" },
+            { c: "Jack", en: "Good question. Most of us are American, but some are immigrants from other countries like Viet Nam, India, and Mexico. Their first language is not English, but they all speak English at school.", vi: "Câu hỏi hay. Hầu hết là người Mỹ, nhưng một số là người nhập cư từ các nước khác như Việt Nam, Ấn Độ, Mexico. Tiếng mẹ đẻ của họ không phải là tiếng Anh, nhưng họ đều nói tiếng Anh ở trường." },
+            { c: "Mi", en: "That's interesting!", vi: "Thật thú vị!" }
+        ],
+        exercises: [
+            {
+                title: "Ex 2. Fill in each blank with no more than TWO words",
+                qs: [
+                    { q: "1. Jack is an exchange student from ______.", vi: "Jack là học sinh trao đổi đến từ...", a: "New York", opts: ["New York", "London", "Ha Noi", "Mexico"] },
+                    { q: "2. This is the ______ Jack has visited Viet Nam.", vi: "Đây là ... Jack đến Việt Nam.", a: "first time", opts: ["first time", "second time", "last time"] },
+                    { q: "3. Most students at Jack's school wear ______ and T-shirts.", vi: "Hầu hết học sinh trường Jack mặc ... và áo phông.", a: "pants", opts: ["pants", "uniforms", "shorts", "jeans"] },
+                    { q: "4. American English and British English have ______ in vocabulary.", vi: "Anh-Mỹ và Anh-Anh có ... về từ vựng.", a: "differences", opts: ["differences", "similarities", "connections"] },
+                    { q: "5. Not all students in Jack's school are ______, but they all speak English.", vi: "Không phải tất cả học sinh trường Jack là ..., nhưng họ đều nói tiếng Anh.", a: "American", opts: ["American", "Vietnamese", "immigrants"] }
+                ]
+            },
+            {
+                title: "Ex 3. Match the words and phrases with their definitions",
+                qs: [
+                    { q: "1. exchange student", vi: "học sinh trao đổi", a: "b. a student who attends a school in a foreign country...", opts: ["b. a student who attends a school in a foreign country...", "a. all the words in a language", "c. people who have come to live permanently in a different country"] },
+                    { q: "2. vocabulary", vi: "từ vựng", a: "a. all the words in a language", opts: ["a. all the words in a language", "d. the language someone learns to speak from birth", "e. to express or represent something"] },
+                    { q: "3. immigrants", vi: "người nhập cư", a: "c. people who have come to live permanently in a different country", opts: ["c. people who have come to live permanently in a different country", "b. a student who attends a school in a foreign country...", "d. the language someone learns to speak from birth"] },
+                    { q: "4. first language", vi: "tiếng mẹ đẻ", a: "d. the language someone learns to speak from birth", opts: ["d. the language someone learns to speak from birth", "a. all the words in a language", "e. to express or represent something"] },
+                    { q: "5. mean", vi: "có nghĩa là", a: "e. to express or represent something", opts: ["e. to express or represent something", "b. a student who attends a school in a foreign country...", "c. people who have come to live permanently in a different country"] }
+                ]
+            },
+            {
+                title: "Ex 4. Fill in each blank with a word from Ex 3.",
+                qs: [
+                    { q: "1. What does your name ______?", vi: "Tên bạn ... gì?", a: "mean", opts: ["mean", "vocabulary", "first language", "immigrants", "exchange student"] },
+                    { q: "2. English ______ is increasing because it borrows words...", vi: "... tiếng Anh đang tăng lên...", a: "vocabulary", opts: ["vocabulary", "mean", "first language", "immigrants", "exchange student"] },
+                    { q: "3. In Australia, there are a lot of ______.", vi: "Ở Úc có nhiều ...", a: "immigrants", opts: ["immigrants", "vocabulary", "mean", "first language", "exchange student"] },
+                    { q: "4. His ______ is Vietnamese, but he can speak English...", vi: "... của anh ấy là tiếng Việt...", a: "first language", opts: ["first language", "vocabulary", "mean", "immigrants", "exchange student"] },
+                    { q: "5. This year our school has a(n) ______ from Britain.", vi: "Năm nay trường ta có một ... từ Anh.", a: "exchange student", opts: ["exchange student", "vocabulary", "mean", "first language", "immigrants"] }
+                ]
+            },
+            {
+                title: "Ex 5. Quiz: Match British English with American English",
+                qs: [
+                    { q: "1. British: flat (căn hộ) - American: ______", vi: "Anh: flat - Mỹ: ...", a: "apartment", opts: ["apartment", "vacation", "soccer", "sweater"] },
+                    { q: "2. British: holiday (kỳ nghỉ) - American: ______", vi: "Anh: holiday - Mỹ: ...", a: "vacation", opts: ["vacation", "apartment", "soccer", "French fries"] },
+                    { q: "3. British: football (bóng đá) - American: ______", vi: "Anh: football - Mỹ: ...", a: "soccer", opts: ["soccer", "vacation", "sweater", "apartment"] },
+                    { q: "4. British: jumper (áo len) - American: ______", vi: "Anh: jumper - Mỹ: ...", a: "sweater", opts: ["sweater", "soccer", "apartment", "French fries"] },
+                    { q: "5. British: chips (khoai tây chiên) - American: ______", vi: "Anh: chips - Mỹ: ...", a: "French fries", opts: ["French fries", "vacation", "sweater", "soccer"] }
+                ]
+            }
+        ]
+    },
+    {
+        id: "closer_look_1",
+        title: "2. A Closer Look 1",
+        subtitle: "Vocabulary & Pronunciation",
+        dialogue: [
+            { c: "Rule", en: "Stress in words ending in -ion and -ity: Stress falls on the syllable immediately BEFORE the suffix. (e.g., re'lation, a'bility)", vi: "Quy tắc trọng âm: Với từ kết thúc bằng -ion và -ity, trọng âm rơi vào âm tiết ngay TRƯỚC nó." }
+        ],
+        exercises: [
+            {
+                title: "Ex 1. Match word in A with meaning in B",
+                qs: [
+                    { q: "1. variety", vi: "sự đa dạng / loại", a: "b. a different type of something", opts: ["b. a different type of something", "a. a language which has legal status", "d. able to speak two languages equally well"] },
+                    { q: "2. bilingual", vi: "song ngữ", a: "d. able to speak two languages equally well", opts: ["d. able to speak two languages equally well", "c. having the same centre", "e. able to speak, read, or write a language easily"] },
+                    { q: "3. fluent", vi: "trôi chảy", a: "e. able to speak, read, or write a language easily", opts: ["e. able to speak, read, or write a language easily", "b. a different type of something", "a. a language which has legal status"] },
+                    { q: "4. concentric", vi: "đồng tâm", a: "c. (of circles) having the same centre", opts: ["c. (of circles) having the same centre", "d. able to speak two languages equally well", "b. a different type of something"] },
+                    { q: "5. official language", vi: "ngôn ngữ chính thức", a: "a. a language which has legal status in a country", opts: ["a. a language which has legal status in a country", "e. able to speak, read, or write a language easily", "c. having the same centre"] }
+                ]
+            },
+            {
+                title: "Ex 2. Match verb in A with phrase in B",
+                qs: [
+                    { q: "1. translate", vi: "dịch", a: "d. from Vietnamese into English", opts: ["d. from Vietnamese into English", "c. up new words in a dictionary", "e. words into a notebook"] },
+                    { q: "2. copy", vi: "chép", a: "e. words into a notebook", opts: ["e. words into a notebook", "b. up a new language", "a. over the grammatical points"] },
+                    { q: "3. pick", vi: "học lỏm/tiếp thu", a: "b. up a new language", opts: ["b. up a new language", "c. up new words in a dictionary", "d. from Vietnamese into English"] },
+                    { q: "4. look", vi: "tra cứu", a: "c. up new words in a dictionary", opts: ["c. up new words in a dictionary", "a. over the grammatical points", "e. words into a notebook"] },
+                    { q: "5. go", vi: "ôn lại/xem lại", a: "a. over the grammatical points", opts: ["a. over the grammatical points", "d. from Vietnamese into English", "b. up a new language"] }
+                ]
+            },
+            {
+                title: "Ex 3. Choose the correct word",
+                qs: [
+                    { q: "1. English is a(n) ______ language in Singapore besides Malay, Mandarin...", vi: "Tiếng Anh là ngôn ngữ [chính thức] ở Singapore...", a: "official", opts: ["official", "first"] },
+                    { q: "2. Although he was born in Britain, he is ______ in Vietnamese.", vi: "Dù sinh ở Anh, anh ấy [trôi chảy] tiếng Việt.", a: "fluent", opts: ["fluent", "bilingual"] },
+                    { q: "3. After you ______ up a word in the dictionary, make an example.", vi: "Sau khi bạn [tra cứu] từ trong từ điển...", a: "look", opts: ["look", "pick"] },
+                    { q: "4. How many books have you ______ from English into Vietnamese?", vi: "Bạn đã [dịch] bao nhiêu sách...", a: "translated", opts: ["translated", "picked"] },
+                    { q: "5. Remember to ______ over the words you have learnt.", vi: "Nhớ [ôn lại] các từ đã học.", a: "go", opts: ["go", "copy"] }
+                ]
+            },
+            {
+                title: "Ex 5. Pronunciation (Mark the stress)",
+                qs: [
+                    { q: "1. relation", vi: "re-LA-tion", a: "re-LA-tion", opts: ["RE-la-tion", "re-LA-tion"] },
+                    { q: "2. decision", vi: "de-CI-sion", a: "de-CI-sion", opts: ["DE-ci-sion", "de-CI-sion"] },
+                    { q: "3. charity", vi: "CHAR-i-ty", a: "CHAR-i-ty", opts: ["CHAR-i-ty", "char-I-ty"] },
+                    { q: "4. ability", vi: "a-BIL-i-ty", a: "a-BIL-i-ty", opts: ["a-bil-I-ty", "a-BIL-i-ty"] }
+                ]
+            }
+        ]
+    },
+    {
+        id: "closer_look_2",
+        title: "3. A Closer Look 2",
+        subtitle: "Grammar: Defining Relative Clauses",
+        dialogue: [
+            { c: "Rule", en: "Defining relative clauses give essential information. Who/Which as Subject -> Cannot omit. Who/Which as Object -> Can omit.", vi: "Mệnh đề quan hệ xác định cung cấp thông tin thiết yếu. Khi đại từ quan hệ là Chủ ngữ -> Không thể lược bỏ. Khi là Tân ngữ -> Có thể lược bỏ." }
+        ],
+        exercises: [
+            {
+                title: "Ex 1. Choose the correct answer",
+                qs: [
+                    { q: "1. English is the language ______ is known as a global language.", vi: "Tiếng Anh là ngôn ngữ [cái mà] được biết đến...", a: "which", opts: ["which", "who", "whose", "what"] },
+                    { q: "2. People ______ speak English well can find jobs easily.", vi: "Những người [người mà] nói tiếng Anh giỏi...", a: "who", opts: ["who", "which", "whose", "why"] },
+                    { q: "3. People from countries ______ do not share a common language use English.", vi: "Người từ các nước [nơi mà/cái mà] không chung ngôn ngữ...", a: "which", opts: ["which", "where", "who", "whose"] },
+                    { q: "4. The woman ______ son won the contest felt very proud.", vi: "Người phụ nữ [người mà có] con trai thắng giải...", a: "whose", opts: ["whose", "who", "which", "when"] },
+                    { q: "5. I met a man ______ first language is Arabic.", vi: "Tôi gặp người đàn ông [người mà có] tiếng mẹ đẻ là Ả Rập.", a: "whose", opts: ["whose", "who", "which", "what"] }
+                ]
+            },
+            {
+                title: "Ex 2. Decide if relative pronoun is Subject (S) or Object (O) & Can omit?",
+                qs: [
+                    { q: "1. The new vocabulary items WHICH we learnt yesterday...", vi: "Từ mới [cái mà] chúng ta học hôm qua (Tân ngữ - Có thể lược bỏ)", a: "Object - Can omit", opts: ["Object - Can omit", "Subject - Cannot omit"] },
+                    { q: "2. I don't like the grammar exercises WHICH are in this book.", vi: "Bài tập ngữ pháp [cái mà] ở trong sách này (Chủ ngữ - Không thể lược bỏ)", a: "Subject - Cannot omit", opts: ["Subject - Cannot omit", "Object - Can omit"] },
+                    { q: "3. The man WHO translated this novel...", vi: "Người đàn ông [người mà] đã dịch cuốn này (Chủ ngữ - Không thể lược bỏ)", a: "Subject - Cannot omit", opts: ["Subject - Cannot omit", "Object - Can omit"] },
+                    { q: "4. The students WHO love languages...", vi: "Học sinh [người mà] yêu ngôn ngữ (Chủ ngữ - Không thể lược bỏ)", a: "Subject - Cannot omit", opts: ["Subject - Cannot omit", "Object - Can omit"] },
+                    { q: "5. The teacher WHO we admire...", vi: "Giáo viên [người mà] chúng tôi ngưỡng mộ (Tân ngữ - Có thể lược bỏ)", a: "Object - Can omit", opts: ["Object - Can omit", "Subject - Cannot omit"] }
+                ]
+            },
+            {
+                title: "Ex 3. Are these sentences Right or Wrong?",
+                qs: [
+                    { q: "1. My sister doesn't like films have unhappy endings.", vi: "Thiếu đại từ quan hệ 'which/that'", a: "Wrong", opts: ["Wrong", "Right"] },
+                    { q: "2. What is the name of the man who is the director...?", vi: "Đúng ngữ pháp", a: "Right", opts: ["Right", "Wrong"] },
+                    { q: "3. One of the four official languages people use in Singapore is English.", vi: "Đúng (lược bỏ 'which')", a: "Right", opts: ["Right", "Wrong"] },
+                    { q: "4. I like the English lesson which Ms Oanh taught yesterday.", vi: "Đúng ngữ pháp", a: "Right", opts: ["Right", "Wrong"] },
+                    { q: "5. Students who grades are high can compete...", vi: "Sai (phải dùng 'whose grades')", a: "Wrong", opts: ["Wrong", "Right"] }
+                ]
+            },
+            {
+                title: "Ex 4. Combine sentences using relative pronoun",
+                qs: [
+                    { q: "1. I met a woman. Her husband is a famous linguist.", vi: "Tôi gặp người phụ nữ có chồng là nhà ngôn ngữ học nổi tiếng.", a: "I met a woman whose husband is a famous linguist.", opts: ["I met a woman whose husband is a famous linguist.", "I met a woman who husband is a famous linguist."] },
+                    { q: "2. My friend's father gave us the tickets. He owns a travel agency.", vi: "Bố bạn tôi, người sở hữu công ty du lịch...", a: "My friend's father who owns a travel agency gave us the tickets.", opts: ["My friend's father who owns a travel agency gave us the tickets.", "My friend's father gave us the tickets who owns a travel agency."] },
+                    { q: "3. The grammar exercise was very complicated. Nobody could do it.", vi: "Bài tập ngữ pháp cái mà không ai làm được...", a: "The grammar exercise which nobody could do was very complicated.", opts: ["The grammar exercise which nobody could do was very complicated.", "The grammar exercise who nobody could do was very complicated."] },
+                    { q: "4. I study English in a language school. It is in the centre of the city.", vi: "Tôi học ở trường ngôn ngữ cái mà ở trung tâm...", a: "I study English in a language school which is in the centre of the city.", opts: ["I study English in a language school which is in the centre of the city.", "I study English in a language school who is in the centre of the city."] },
+                    { q: "5. The student completed the quiz the fastest. The teacher praised him.", vi: "Giáo viên khen ngợi học sinh người mà hoàn thành nhanh nhất.", a: "The teacher praised the student who completed the quiz the fastest.", opts: ["The teacher praised the student who completed the quiz the fastest.", "The teacher praised the student which completed the quiz the fastest."] }
+                ]
+            }
+        ]
+    },
+    {
+        id: "communication",
+        title: "4. Communication",
+        subtitle: "Saying Good Luck & English Facts",
+        dialogue: [
+            { c: "Tom", en: "Good luck with your English exam.", vi: "Chúc cậu may mắn với bài thi tiếng Anh." },
+            { c: "Mi", en: "Thanks. I'll try my best.", vi: "Cảm ơn. Tớ sẽ cố hết sức." },
+            { c: "Phong", en: "I've heard that you're moving to the US. I wish you all the best of luck.", vi: "Tớ nghe nói cậu sắp chuyển đi Mỹ. Chúc cậu mọi điều may mắn nhất." },
+            { c: "Neighbour", en: "Thank you so much.", vi: "Cảm ơn cháu nhiều." }
+        ],
+        exercises: [
+            {
+                title: "Ex 3. Interesting facts about English (Ordering)",
+                qs: [
+                    { q: "1. The most common letter in English is...", vi: "Chữ cái phổ biến nhất là...", a: "e", opts: ["e", "a", "o", "i"] },
+                    { q: "2. Only two English words end in '-gry': 'angry' and...", vi: "Chỉ 2 từ kết thúc bằng -gry: angry và...", a: "hungry", opts: ["hungry", "shungry", "bagry"] },
+                    { q: "3. Longest word with no repeated letters is...", vi: "Từ dài nhất không lặp chữ cái...", a: "uncopyrightable", opts: ["uncopyrightable", "incomprehensible", "unbelievable"] },
+                    { q: "4. Longest word without a true vowel is...", vi: "Từ dài nhất không có nguyên âm thực...", a: "rhythms", opts: ["rhythms", "sky", "fly"] },
+                    { q: "5. Words with 5 consecutive vowels: 'queueing' and...", vi: "Từ có 5 nguyên âm liên tiếp: queueing và...", a: "cooeeing", opts: ["cooeeing", "sequencing", "queuing"] }
+                ]
+            }
+        ]
+    },
+    {
+        id: "skills_1",
+        title: "5. Skills 1",
+        subtitle: "Reading: Kachru's Model",
+        dialogue: [
+            { c: "Narrator", en: "Braj Kachru was a Professor of Linguistics who invented the term 'World Englishes'. In 1985, Kachru proposed a model of the different uses of English around the world. There are three concentric circles in the model: Inner Circle, Outer Circle, and Expanding Circle.", vi: "Braj Kachru là Giáo sư Ngôn ngữ học, người đã phát minh thuật ngữ 'World Englishes'. Năm 1985, ông đề xuất mô hình 3 vòng tròn đồng tâm: Vòng trong, Vòng ngoài và Vòng mở rộng." }
+        ],
+        exercises: [
+            {
+                title: "Ex 2. Read the text and choose the correct answer",
+                qs: [
+                    { q: "1. What is the text mainly about?", vi: "Văn bản chủ yếu nói về gì?", a: "The three circles of World Englishes", opts: ["The three circles of World Englishes", "Professor Braj Kachru", "Native speakers of English"] },
+                    { q: "2. The word 'model' in paragraph 2 means...", vi: "Từ 'model' nghĩa là...", a: "a description of a system", opts: ["a description of a system", "an excellent person", "a small copy"] },
+                    { q: "3. The phrase 'this circle' in paragraph 5 refers to...", vi: "Cụm 'this circle' ám chỉ...", a: "Expanding Circle", opts: ["Expanding Circle", "Inner Circle", "Outer Circle"] }
+                ]
+            },
+            {
+                title: "Ex 3. Fill in the summary",
+                qs: [
+                    { q: "1. Inner Circle: English is the ______ language.", vi: "Vòng trong: Tiếng Anh là ngôn ngữ [đầu tiên]", a: "first", opts: ["first", "second", "foreign"] },
+                    { q: "2. Outer Circle: English is the second or ______ language.", vi: "Vòng ngoài: Tiếng Anh là ngôn ngữ thứ 2 hoặc [chính thức]", a: "official", opts: ["official", "foreign", "native"] },
+                    { q: "3. Outer Circle: Speakers ______ the standards.", vi: "Vòng ngoài: Người nói [tuân theo] tiêu chuẩn", a: "follow", opts: ["follow", "provide", "invent"] },
+                    { q: "4. Expanding Circle: English is a ______ language.", vi: "Vòng mở rộng: Tiếng Anh là ngôn ngữ [nước ngoài]", a: "foreign", opts: ["foreign", "first", "official"] },
+                    { q: "5. Expanding Circle: Speakers follow the ______ established.", vi: "Vòng mở rộng: Tuân theo [quy tắc] đã thiết lập", a: "rules", opts: ["rules", "models", "terms"] }
+                ]
+            }
+        ]
+    },
+    {
+        id: "skills_2",
+        title: "6. Skills 2",
+        subtitle: "Listening: Tips to improve English",
+        dialogue: [
+            { c: "Trang", en: "I've learnt English for seven years. I think the most important thing is vocabulary. I read English books and use a good dictionary. I also have a vocabulary notebook. I note down new words and try to use them. I am not confident in my grammar yet.", vi: "Tớ đã học tiếng Anh 7 năm. Tớ nghĩ quan trọng nhất là từ vựng. Tớ đọc sách tiếng Anh và dùng từ điển tốt. Tớ cũng có vở ghi từ vựng. Tớ ghi lại từ mới và cố gắng sử dụng chúng. Tớ chưa tự tin về ngữ pháp lắm." }
+        ],
+        exercises: [
+            {
+                title: "Ex 2. Listen and decide if statements are True (T) or False (F)",
+                qs: [
+                    { q: "1. Trang has studied English for seven years.", vi: "Trang đã học tiếng Anh 7 năm.", a: "True", opts: ["True", "False"] },
+                    { q: "2. She talks about how she learnt grammar.", vi: "Cô ấy nói về cách học ngữ pháp (Sai: Vocabulary).", a: "False", opts: ["True", "False"] },
+                    { q: "3. She has learnt new words from reading English books.", vi: "Cô ấy học từ mới từ việc đọc sách.", a: "True", opts: ["True", "False"] },
+                    { q: "4. She is confident about her English vocabulary now.", vi: "Cô ấy tự tin về vốn từ vựng (Sai: not confident yet).", a: "False", opts: ["True", "False"] }
+                ]
+            },
+            {
+                title: "Ex 3. Listen again and fill in the blanks",
+                qs: [
+                    { q: "1. Guessing the ______.", vi: "Đoán [nghĩa]", a: "meaning", opts: ["meaning", "spelling", "grammar"] },
+                    { q: "2. Checking the meaning and ______.", vi: "Kiểm tra nghĩa và [phát âm]", a: "pronunciation", opts: ["pronunciation", "writing", "reading"] },
+                    { q: "3. ______ all new words into a notebook.", vi: "[Ghi chú/Chép] tất cả từ mới", a: "Noting", opts: ["Noting", "Reading", "Speaking"] },
+                    { q: "4. ______ in English.", vi: "[Viết] bằng tiếng Anh", a: "Writing", opts: ["Writing", "Thinking", "Dreaming"] },
+                    { q: "5. Using words learnt and ______ more new words.", vi: "Dùng từ đã học và [học] thêm từ mới", a: "learning", opts: ["learning", "finding", "seeing"] }
+                ]
+            }
+        ]
+    },
+    {
+        id: "looking_back",
+        title: "7. Looking Back",
+        subtitle: "Review Vocabulary & Grammar",
+        dialogue: [],
+        exercises: [
+            {
+                title: "Ex 1. Fill in blanks with words from the box",
+                qs: [
+                    { q: "1. What does this word ______ in English?", vi: "Từ này [nghĩa là] gì?", a: "mean", opts: ["mean", "fluent", "bilingual", "immigrants", "concentric"] },
+                    { q: "2. The Kachru's model has three ______ circles.", vi: "Mô hình 3 vòng tròn [đồng tâm]", a: "concentric", opts: ["concentric", "mean", "bilingual", "fluent", "immigrants"] },
+                    { q: "3. He speaks to mum in VN, dad in English. He's ______.", vi: "Cậu ấy [song ngữ]", a: "bilingual", opts: ["bilingual", "fluent", "mean", "concentric", "immigrants"] },
+                    { q: "4. Many children are ______ English speakers.", vi: "Nhiều trẻ em là người nói tiếng Anh [trôi chảy]", a: "fluent", opts: ["fluent", "concentric", "mean", "bilingual", "immigrants"] },
+                    { q: "5. The number of ______ has increased.", vi: "Số lượng [người nhập cư] tăng", a: "immigrants", opts: ["immigrants", "mean", "fluent", "bilingual", "concentric"] }
+                ]
+            },
+            {
+                title: "Ex 2. Choose the correct answer (Phrasal verbs)",
+                qs: [
+                    { q: "1. My students usually go ______ their homework.", vi: "Xem lại (go over)", a: "over", opts: ["over", "into", "in", "up"] },
+                    { q: "2. Do you know how many ______ of English are there?", vi: "Các biến thể (varieties)", a: "varieties", opts: ["varieties", "grammars", "vocabulary", "official languages"] },
+                    { q: "3. Copy these sentences ______ your notebook.", vi: "Chép vào (into)", a: "into", opts: ["into", "over", "on", "up"] },
+                    { q: "4. She's good at ______ English stories.", vi: "Dịch (translating)", a: "translating", opts: ["translating", "picking", "looking", "copying"] },
+                    { q: "5. She has ______ up some Singaporean English.", vi: "Học lỏm (picked up)", a: "picked", opts: ["picked", "copied", "gone", "looked"] }
+                ]
+            },
+            {
+                title: "Ex 3. Circle relative pronoun which can be OMITTED",
+                qs: [
+                    { q: "1. words WHICH are the same", vi: "Subject -> Cannot omit", a: "Cannot omit", opts: ["Cannot omit", "Can omit"] },
+                    { q: "2. language WHICH people use", vi: "Object -> Can omit", a: "Can omit", opts: ["Can omit", "Cannot omit"] },
+                    { q: "3. boy WHO is giving", vi: "Subject -> Cannot omit", a: "Cannot omit", opts: ["Cannot omit", "Can omit"] },
+                    { q: "4. language WHICH has", vi: "Subject -> Cannot omit", a: "Cannot omit", opts: ["Cannot omit", "Can omit"] },
+                    { q: "5. student WHO we invited", vi: "Object -> Can omit", a: "Can omit", opts: ["Can omit", "Cannot omit"] }
+                ]
+            },
+            {
+                title: "Ex 4. Combine sentences",
+                qs: [
+                    { q: "1. Dictionary is on table. Dad gave it to me.", vi: "The dictionary which dad gave me...", a: "The English-English dictionary which my dad gave me is on the table.", opts: ["The English-English dictionary which my dad gave me is on the table.", "The English-English dictionary who my dad gave me is on the table."] },
+                    { q: "2. She used words. They are from French.", vi: "She used some words which are from French.", a: "She used some words which are from French.", opts: ["She used some words which are from French.", "She used some words who are from French."] },
+                    { q: "3. He learnt on a website. I recommended it.", vi: "He has learnt English on a website which I recommended.", a: "He has learnt English on a website which I recommended.", opts: ["He has learnt English on a website which I recommended.", "He has learnt English on a website who I recommended."] },
+                    { q: "4. Languages have many speakers. English is one.", vi: "English is one of the languages which have a lot of speakers.", a: "English is one of the languages which have a lot of speakers.", opts: ["English is one of the languages which have a lot of speakers.", "English is one of the languages who have a lot of speakers."] },
+                    { q: "5. My sister learning at centre. It has best teachers.", vi: "My sister is learning at a centre which has the best teachers.", a: "My sister is learning at a language centre which has the best teachers in our town.", opts: ["My sister is learning at a language centre which has the best teachers in our town.", "My sister is learning at a language centre who has the best teachers in our town."] }
+                ]
+            }
+        ]
+    }
+];
+
+// --- LOGIC ---
+let currentIdx = 0;
+let showTranslation = false;
+
+function init() {
+    renderNav();
+    renderSection(0);
+}
+
+function renderNav() {
+    const nav = document.getElementById('navList');
+    nav.innerHTML = '';
+    unitData.forEach((u, i) => {
+        const div = document.createElement('div');
+        div.className = `nav-item ${i === currentIdx ? 'active' : ''}`;
+        div.innerHTML = `<span>${u.title}</span> <span class="badge">${countQ(u)} câu</span>`;
+        div.onclick = () => { currentIdx = i; renderNav(); renderSection(i); };
+        nav.appendChild(div);
+    });
+}
+
+function countQ(u) { return u.exercises ? u.exercises.reduce((acc, e) => acc + e.qs.length, 0) : 0; }
+
+function renderSection(idx) {
+    const u = unitData[idx];
+    const main = document.getElementById('mainArea');
+    main.innerHTML = '';
+
+    // Header
+    const hBox = document.createElement('div');
+    hBox.className = 'header-box';
+    hBox.innerHTML = `<h1 class="unit-title">${u.title}</h1><div class="unit-sub">${u.subtitle}</div>`;
+    main.appendChild(hBox);
+
+    // Dialogue
+    if (u.dialogue && u.dialogue.length > 0) {
+        const box = document.createElement('div');
+        box.className = 'transcript-box';
+        box.innerHTML = `
+            <div class="ts-header">
+                <span><i class="fas fa-headphones-alt"></i> HỘI THOẠI & KỊCH BẢN (AI Voice)</span>
+                <button class="action-btn btn-check" style="width:auto; margin:0; padding:6px 16px; font-size:0.85rem;" onclick="playAudio(${idx})"><i class="fas fa-play"></i> Nghe</button>
+            </div>
+            <div class="ts-body" id="tsBody"></div>
+        `;
+        main.appendChild(box);
+        const body = box.querySelector('.ts-body');
+        u.dialogue.forEach((line, i) => {
+            const row = document.createElement('div');
+            row.className = 'line';
+            row.id = `line-${i}`;
+            row.onclick = () => speak(line.en, line.c);
+            row.innerHTML = `<div><span class="char-name">${line.c}:</span> ${line.en}</div><div class="vi-trans">${line.vi}</div>`;
+            body.appendChild(row);
+        });
+    }
+
+    // Exercises
+    if (u.exercises) {
+        u.exercises.forEach((ex, exIdx) => {
+            const card = document.createElement('div');
+            card.className = 'card';
+            card.innerHTML = `<h3>${ex.title}</h3>`;
+            
+            ex.qs.forEach((q, qIdx) => {
+                const row = document.createElement('div');
+                row.className = 'question-row';
+                row.id = `q-${exIdx}-${qIdx}`;
+                
+                // Shuffle options
+                const shuffled = [...q.opts].sort(() => Math.random() - 0.5);
+                const optsHtml = shuffled.map(o => `<option value="${o}">${o}</option>`).join('');
+
+                row.innerHTML = `
+                    <div class="q-text">${q.q}</div>
+                    <div class="q-vi">${q.vi}</div>
+                    <select class="ans-select" id="ans-${exIdx}-${qIdx}" data-correct="${q.a}">
+                        <option value="">-- Chọn đáp án --</option>
+                        ${optsHtml}
+                    </select>
+                    <div class="feedback" id="fb-${exIdx}-${qIdx}"></div>
+                `;
+                card.appendChild(row);
+            });
+            main.appendChild(card);
+        });
+    }
+    updateTrans();
+}
+
+function toggleTranslation() {
+    showTranslation = !showTranslation;
+    const btn = document.querySelector('.toggle-row');
+    if(showTranslation) btn.classList.add('active'); else btn.classList.remove('active');
+    updateTrans();
+}
+
+function updateTrans() {
+    const main = document.getElementById('mainArea');
+    if(showTranslation) main.classList.add('show-trans'); else main.classList.remove('show-trans');
+}
+
+function checkAll() {
+    const u = unitData[currentIdx];
+    if(!u.exercises) return;
+    let total = 0, correct = 0;
+    
+    u.exercises.forEach((ex, exIdx) => {
+        ex.qs.forEach((q, qIdx) => {
+            total++;
+            const row = document.getElementById(`q-${exIdx}-${qIdx}`);
+            const sel = document.getElementById(`ans-${exIdx}-${qIdx}`);
+            const fb = document.getElementById(`fb-${exIdx}-${qIdx}`);
+            const userAns = sel.value;
+            
+            row.classList.remove('correct', 'wrong');
+            if(userAns === q.a) {
+                correct++;
+                row.classList.add('correct');
+                fb.innerHTML = `<span class="fb-correct"><i class="fas fa-check"></i> Chính xác!</span>`;
+            } else {
+                row.classList.add('wrong');
+                fb.innerHTML = `<span class="fb-wrong"><i class="fas fa-times"></i> Sai rồi. Đáp án đúng: ${q.a}</span>`;
+            }
+        });
+    });
+    alert(`Bạn làm đúng ${correct}/${total} câu.`);
+}
+
+function resetSection() { renderSection(currentIdx); }
+
+// AI VOICE LOGIC - ROLE PLAY
+function speak(text, char) {
+    window.speechSynthesis.cancel();
+    const utt = new SpeechSynthesisUtterance(text);
+    utt.lang = 'en-US';
+    
+    // Male Voice List
+    const males = ['Jack', 'Phong', 'Tom', 'Teacher', 'Narrator']; 
+    if(males.some(m => char.includes(m))) {
+        utt.pitch = 0.8; // Trầm (Nam)
+        utt.rate = 0.95;
+    } else {
+        utt.pitch = 1.2; // Cao (Nữ - Mi, Lan, v.v.)
+        utt.rate = 1.0;
+    }
+    window.speechSynthesis.speak(utt);
+}
+
+async function playAudio(idx) {
+    const lines = unitData[idx].dialogue;
+    if (!lines) return;
+    window.speechSynthesis.cancel();
+    
+    for (let i = 0; i < lines.length; i++) {
+        const line = lines[i];
+        document.querySelectorAll('.line').forEach(l => l.classList.remove('speaking'));
+        const el = document.getElementById(`line-${i}`);
+        if(el) { el.classList.add('speaking'); el.scrollIntoView({behavior: "smooth", block: "center"}); }
+        
+        const utt = new SpeechSynthesisUtterance(line.en);
+        utt.lang = 'en-US';
+        const males = ['Jack', 'Phong', 'Tom', 'Teacher', 'Narrator'];
+        if (males.some(m => line.c.includes(m))) { utt.pitch = 0.8; utt.rate = 0.95; } else { utt.pitch = 1.2; utt.rate = 1.0; }
+        
+        await new Promise(r => {
+            utt.onend = r;
+            window.speechSynthesis.speak(utt);
+        });
+        await new Promise(r => setTimeout(r, 400));
+    }
+    document.querySelectorAll('.line').forEach(l => l.classList.remove('speaking'));
+}
+
+// Start
+init();
+</script>
+</body>
+</html>
